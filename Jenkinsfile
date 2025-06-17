@@ -1,9 +1,6 @@
 pipeline {
     agent any
-    tools {
-        // 如需使用 Node.js，配置 NodeJS 插件并指定版本名称
-        nodejs 'NodeJS_16'
-    }
+
     environment {
         // Docker 镜像名称，可根据需要修改
         BACKEND_IMAGE = 'ai-backend:latest'
