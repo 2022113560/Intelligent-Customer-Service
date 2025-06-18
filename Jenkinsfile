@@ -6,11 +6,6 @@ pipeline {
         BACKEND_IMAGE = 'ai-backend:latest'
     }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Build Backend Docker') {
             steps {
                 dir('backend') {
