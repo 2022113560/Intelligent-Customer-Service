@@ -20,6 +20,34 @@ pipeline {
       }
     }
 
+    stage('Init SSH') {
+      steps {
+        // 确保 ~/.ssh 存在并添加 GitHub 主机密钥
+        sh '''
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+        '''
+      }
+    }
+
+    stage('Checkout') {
+      steps {
+        // 用 ssh-agent 插件加载你的私钥凭据
+        sshagent(['gitlab-ssh-key']) {
+          // 这里使用 declarative git 步骤也可以，但用 shell clone 最灵活
+          sh 'git clone git@github.com:2022113560/Intelligent-Customer-Service.git .'
+        }
+      }
+    }
+
+    stage('Build Backend Docker') {
+      steps {
+        dir('backend') {
+          script { docker.build(BACKEND_IMAGE, '.') }
+        }
+      }
+    }
     stage('Build Backend Docker') {
       steps {
         dir('backend') {
